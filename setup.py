@@ -4,10 +4,16 @@ from distutils.core import setup
 
 setup(
     name='Eugenium',
+    packages=['eugenium'],
     version='0.0.1',
     license='MIT',
-    description='Classes to create and deploy selenium processes on google cloud platform',
+    description=
+    'Classes to create and deploy selenium processes on google cloud platform',
     author='Eugene Brown',
     author_email='efbbrown@gmail.com',
     url='https://github.com/efbbrown/eugenium',
-    packages=['eugenium'])
+    download_url="https://github.com/efbbrown/eugenium/archive/v_001.tar.gz",
+    install_requires=[
+        "selenium",
+        "sqlalchemy"
+    ])
