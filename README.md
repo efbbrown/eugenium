@@ -11,5 +11,5 @@ here <https://chromedriver.chromium.org/downloads>.
 ## Installation
 
 ```
-pip install git+git://github.com/efbbrown/eugenium.git
+pip install eugenium
 ```
