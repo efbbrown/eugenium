@@ -7,3 +7,7 @@ examples
 # examples/*/config.yaml
 
 .vscode
+
+build/
+dist/
+MANIFEST
