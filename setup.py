@@ -5,7 +5,7 @@ from distutils.core import setup
 setup(
     name='Eugenium',
     packages=['eugenium'],
-    version='0.0.1',
+    version='0.0.2',
     license='MIT',
     description=
     'Classes to create and deploy selenium processes on google cloud platform',
