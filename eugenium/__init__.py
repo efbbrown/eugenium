@@ -1,2 +1,2 @@
-from BaseWebInteractor import BaseWebInteractor
-from GoogleCloudInteractor import GoogleCloudInteractor
+from eugenium.BaseWebInteractor import BaseWebInteractor
+from eugenium.GoogleCloudInteractor import GoogleCloudInteractor
