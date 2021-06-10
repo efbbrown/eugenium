@@ -34,8 +34,15 @@ class GoogleCloudInteractor():
                 f"interactor.data_to_sql(data_collector=interactor.{data_collector_method}, con=models.engine, schema=interactor.schema, if_exists='append')\n"
             )
 
-    def deploy_to_cloud_functions(self):
-        # Deploy to cloud functions
+    def deploy_to_cloud_functions(
+        self,
+        cloud_function_name: str,
+        region: str,
+        timeout: int):
+        """Deploy to cloud functions
+        """
+        # TODO: Add code that does this:
+        # gcloud beta functions deploy $NAME --region=$REGION --timeout=$TIMEOUT --runtime python37 --trigger-http
         pass
 
     def deploy_to_cloud_scheduler(self):
