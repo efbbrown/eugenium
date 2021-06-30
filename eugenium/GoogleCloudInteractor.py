@@ -1,4 +1,7 @@
 import os
+import json
+from shlex import split, quote
+from subprocess import check_output, CalledProcessError
 from shutil import copyfile
 
 
@@ -34,17 +37,54 @@ class GoogleCloudInteractor():
                 f"interactor.data_to_sql(data_collector=interactor.{data_collector_method}, con=models.engine, schema=interactor.schema, if_exists='append')\n"
             )
 
-    def deploy_to_cloud_functions(
-        self,
-        cloud_function_name: str,
-        region: str,
-        timeout: int):
+    def deploy_to_cloud_functions(self,
+                                  project_id: str,
+                                  cloud_function_name: str,
+                                  region: str,
+                                  timeout: int = 240,
+                                  runtime: str = 'python37',
+                                  source: str = None):
         """Deploy to cloud functions
+        Read docs here ,https://googleapis.dev/python/cloudfunctions/latest/functions_v1/cloud_functions_service.html>
+        Read source here <https://github.com/googleapis/python-functions/>
+        Parameters
+        ----------
+        timeout : int
+            An integer defining the number of seconds from the initialisation
+            of the cloud function after which it will timeout
+        source : str
+            Source location of the function directory
         """
-        # TODO: Add code that does this:
-        # gcloud beta functions deploy $NAME --region=$REGION --timeout=$TIMEOUT --runtime python37 --trigger-http
-        pass
+        # Check that the current project is the one you want to use
+        current_project = self.gcloud_config_get_value_project()
+        if current_project != project_id:
+            self.gcloud_config_set_project(project_id)
+        # Default source location is the location the method
+        # compile_script_for_cloud_functions saves to
+        if source is None:
+            source = f"cloud_functions/{cloud_function_name}"
+        # Deploy to cloud functions
+        self.call_subprocess(
+            f"gcloud beta functions deploy {cloud_function_name} --region={region} --timeout={timeout} --source={source} --runtime {runtime} --trigger-http"
+        )
 
     def deploy_to_cloud_scheduler(self):
         # Deploy to cloud scheduler
         pass
+    def call_subprocess(self, command, split_command=True, shell=True):
+        if split_command:
+            command = split(command)
+        try:
+            output = check_output(command, shell=shell).strip()
+        except CalledProcessError as e:
+            raise RuntimeError(
+                f"command '{quote(e.cmd)}' return with error (code {e.returncode}): {e.output}"
+            )
+        return output
+
+    def gcloud_config_get_value_project(self):
+        current_project = self.call_subprocess("gcloud config get-value project")
+        return current_project
+
+    def gcloud_config_set_project(self, project_id):
+        self.call_subprocess(f"gcloud config set project {project_id}")
