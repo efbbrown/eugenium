@@ -68,9 +68,19 @@ class GoogleCloudInteractor():
             f"gcloud beta functions deploy {cloud_function_name} --region={region} --timeout={timeout} --source={source} --runtime {runtime} --trigger-http"
         )
 
-    def deploy_to_cloud_scheduler(self):
-        # Deploy to cloud scheduler
-        pass
+    def schedule_cloud_function(self,
+                                cloud_function_name: str,
+                                schedule: str,
+                                region: str,
+                                project_id: str):
+        """Schedule a cloud function
+        Read docs here <https://googleapis.dev/python/cloudscheduler/latest/scheduler_v1/cloud_scheduler.html>
+        """
+        # Schedule a cloud function
+        self.call_subprocess(
+            f"gcloud beta scheduler jobs create http {cloud_function_name} --schedule='{schedule}' --uri=https://{region}-{project_id}.cloudfunctions.net/{cloud_function_name}"
+        )
+
     def call_subprocess(self, command, split_command=True, shell=True):
         if split_command:
             command = split(command)
