@@ -28,7 +28,7 @@ class GoogleCloudInteractor():
         with open(file_main, "w") as f:
             f.write(
                 f"from {interactor_script_name} import {data_collector_class}, models\n\n\n")
-            f.write(f"def {interactor_script_name}(request):\n\t")
+            f.write(f"def {cloud_function_name}(request):\n\t")
             f.write(f"interactor = {data_collector_class}(driver_path='')\n\t")
             f.write(
                 f"interactor.data_to_sql(data_collector=interactor.{data_collector_method}, con=models.engine, schema=interactor.schema, if_exists='append')\n"
