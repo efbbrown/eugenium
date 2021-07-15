@@ -12,7 +12,7 @@ setup(
     author='Eugene Brown',
     author_email='efbbrown@gmail.com',
     url='https://github.com/efbbrown/eugenium',
-    download_url="https://github.com/efbbrown/eugenium/archive/v_001.tar.gz",
+    download_url="https://github.com/efbbrown/eugenium/archive/v.0.0.3-alpha.tar.gz",
     install_requires=[
         "selenium",
         "sqlalchemy"
