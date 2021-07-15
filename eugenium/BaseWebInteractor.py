@@ -16,31 +16,41 @@ class BaseWebInteractor():
     """
     def __init__(
             self,
-            wait_time: int = 3,
+            headless: bool = True,
             driver_path: str = None,
+            wait_time: int = 5,
             logging_level: int = 20,  # This is equal to logging.INFO
             *args,
             **kwargs):
         """
             Parameters
             ----------
+            headless : bool
+                Whether to run selenium in headless mode or not
+            driver_path : str
+                The location of your chrome driver
             wait_time : int
                 The time in seconds for selenium to wait for elements before timing out
                 See more here <https://www.selenium.dev/documentation/en/webdriver/waits/>
-            driver_path : str
-                The location of your chrome driver
 
             Returns
             -------
             None
         """
-        self.wait_time = wait_time
-        self.driver_path = driver_path
-        # TODO: Remove the next two lines if unnecessary
+        chrome_options = webdriver.ChromeOptions()
+        self.headless = headless
+        if self.headless:
+            chrome_options.add_argument("--headless")
+            chrome_options.add_argument("--disable-gpu")
+            chrome_options.add_argument("window-size=1024,768")
+            chrome_options.add_argument("--no-sandbox")
+        else:
+            self.driver_path = driver_path
+        # TODO: Remove the next line if unnecessary
         # Added due to this issue <https://stackoverflow.com/a/65497385/4260991>
-        options = webdriver.ChromeOptions()
-        options.add_experimental_option('excludeSwitches', ['enable-logging'])
-        self.driver = webdriver.Chrome(self.driver_path)
+        chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
+        self.driver = webdriver.Chrome(chrome_options=chrome_options)
+        self.wait_time = wait_time
         self.ignored_exceptions = (
             NoSuchElementException,
             StaleElementReferenceException,
